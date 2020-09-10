@@ -77,4 +77,5 @@ You've just:
 - populated the cluster with several pods containing an application
 - exposed the application; and 
 - scaled the application
+
 (- and become a legend in the making...!!!)
