@@ -1,84 +1,81 @@
-#LAB: Google Cloud Fundamentals: Getting Started with Compute Engine
+# Google Cloud Fundamentals: Getting Started with GKE
 
-##Objectives:
+## Objectives
 
-In this lab, you will learn how to perform the following tasks:
+    - Provision a Kubernetes cluster using Kubernetes Engine.
 
- - Create a Compute Engine virtual machine using the Google Cloud Platform (GCP) Console.
+    - Deploy and manage Docker containers using kubectl
 
- - Create a Compute Engine virtual machine using the gcloud command-line interface.
+## Steps
 
- - Connect between the two instances.
+1. Sign in to the Google Cloud Platform (GCP) Console
 
-## Steps:
+2. Confirm/Enable that needed APIs are enabled 
 
-1. Create a Compute Engine virtual machine using the Google Cloud Platform (GCP) Console.
+    - Check if the Kubernetes Engine API and the Container Registry API are enabled/available
 
-    gcloud compute instances create my-vm-1 --machine-type "n1-standard-1" --image-project "debian-cloud" --image "debian-9-stretch-v20190213" --subnet "default" --tags http
+        gcloud services list --enabled
 
-  - Add firewall rule for the tags created above
+    - If you see them on the list then proceed to the next step. If not then enable the required API
+
+        gcloud services enable container.googleapis.com
+
+        gcloud services enable containerregistry.googleapis.com
+
+3. Start a Kubernetes Engine cluster, deploy and expose nginx 
+
+    - Export an environment variable for zone
+
+        export MY_ZONE=us-central1-a
+
+    - Start a Kubernetes cluster managed by Kubernetes Engine. Name the cluster webfrontend and configure it to run 2 nodes
+
+        gcloud container clusters create webfrontend --zone $MY_ZONE --num-nodes 2
+
+    - Check your installed version of Kubernetes using the kubectl version command
     
-    gcloud compute firewall-rules create default-allow-http --direction=INGRESS --action=ALLOW --rules=tcp:80 --target-tags=http
+        kubectl version
 
-2. Create a virtual machine using the gcloud command line
+    - Launch a single instance of the nginx container
 
-    gcloud config set compute/zone us-central1-b
+        kubectl create deploy nginx --image=nginx:1.17.10
 
-    gcloud compute instances create my-vm-2 --machine-type "n1-standard-1" --image-project "debian-cloud" --image "debian-9-stretch-v20190213" --subnet "default"
+    - View the pod running the nginx container
 
-3. Connect between VM instances 
+        kubectl get pods 
 
-    - Connect to my-vm-2
+    - Expose the nginx container to the Internet
 
-        gcloud compute ssh my-vm-2
-    
-    - Use the ping command to confirm that my-vm-2 can reach my-vm-1 over the network:
-        
-        ping  -c 4 my-vm-1
+        kubectl expose deployment nginx --port 80 --type LoadBalancer
 
-    
-    //This  does not work for me in the lab, error is 'ERROR: (gcloud.compute.ssh) Could not fetch resource:
-    - Insufficient Permission: Request had insufficient authentication scopes. FIND SOLUTION.
-    //If this doesn't work ssh directly into my-vm-1
-    - Use the ssh command to open a command prompt on my-vm-1 (from my-vm-2)
+    - View the new service:
 
-        ssh my-vm-1 
+        kubectl get services
 
-    - At the command prompt on my-vm-1, install the Nginx web server
+    - Open a new web browser tab and paste your cluster's external IP address into the address bar. 
+    Result: The default home page of the Nginx browser is displayed.
 
-        sudo apt-get install nginx-light -y
+    - Scale up the number of pods running on your service
 
-    - Use the nano text editor to add a custom message to the home page of the web server
+        kubectl scale deployment nginx --replicas 3
 
-        sudo nano /var/www/html/index.nginx-debian.html
+    - Confirm that Kubernetes has updated the number of pods
 
-    - Use the arrow keys to move the cursor to the line just below the h1 header. Add your name
+        kubectl get pods
 
-        Hi from Graham
+    - Confirm that your external IP address has not changed
 
-    - Press Ctrl+O and then press Enter to save your edited file, and then press Ctrl+X to exit the nano text editor
+        kubectl get services
 
-    - Confirm that the web server is serving your new page. At the command prompt on my-vm-1, execute this command
+    - Return to the web browser tab in which you viewed your cluster's external IP address and refresh the page
+    Result: The nginx web server should still respond
 
-        curl http://localhost/
+## Congratulations!
 
-        - The response will be the HTML source of the web server's home page, including your line of custom text.    
+You've just:
+- configured a Kubernetes cluster in Kubernetes Engine
+- populated the cluster with several pods containing an application
+- exposed the application; and 
+- scaled the application
 
-    - Exit the command prompt on my-vm-1
-
-        exit
-
-    - Confirm that my-vm-2 can reach the web server on my-vm-1, at the command prompt on my-vm-2, execute this command
-
-        curl http://my-vm-1/
-
-        - The response will be the HTML source of the web server's home page, including your line of custom text.
-
-    - Copy the External IP address for my-vm-1
-
-        gcloud compute instances list --zone us-central1-a
-
-    - Paste it into the address bar of a new browser tab
-
-        Result should be that your web server's home page will be displayed, including your custom text
-
+(- and become a legend in the making...!!!)
