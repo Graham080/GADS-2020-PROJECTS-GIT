@@ -1,4 +1,4 @@
-# Google Cloud Fundamentals: Getting Started with GKE
+# Lab: Google Cloud Fundamentals: Getting Started with GKE
 
 ## Objectives
 

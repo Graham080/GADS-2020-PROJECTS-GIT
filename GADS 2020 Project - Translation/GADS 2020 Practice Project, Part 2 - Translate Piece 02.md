@@ -1,4 +1,4 @@
-# AK8S-04 Creating a GKE Cluster via Cloud Shell
+# Lab: AK8S-04 Creating a GKE Cluster via Cloud Shell
 
 ## Objectives
 
