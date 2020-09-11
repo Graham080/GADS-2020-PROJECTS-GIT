@@ -58,7 +58,8 @@
 9. Web preview 
 
         https://ssh.cloud.google.com/devshell/proxy?authuser=0&port=8080&environment_id=default
-            Result: Hello World displayed in browser
+
+Result: Hello World displayed in browser
 
 10. End the test / abort the deployed service.
 
@@ -72,7 +73,7 @@
 
 ### Deploy and run Hello World on App Engine
 
-    (deploy your application to the App Engine Standard environment)
+(deploy your application to the App Engine Standard environment)
 
 12. Navigate to the source directory:
 
@@ -113,4 +114,3 @@ Note that even though the Instance is _disabled_ you will still pay for the serv
 ## Congratulations!
 
         You've created your first application using App Engine!
-        
