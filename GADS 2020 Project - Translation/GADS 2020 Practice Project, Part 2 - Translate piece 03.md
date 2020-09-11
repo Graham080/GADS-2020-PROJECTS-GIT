@@ -93,15 +93,24 @@
 
 
 ### Disable the application
+Disclainer: Documentation, opinion, and available community knowledge on this matter seems varied.
+It is possible to _disable_ the app on the console if all esle fails.
+The commands below may or may not work and may also function properly after manually _disabling_ the App Engine Instance in your console view. 
+Note that even though the Instance is _disabled_ you will still pay for the service.
 
-15. Click Disable application
+15. Get App Engine version
 
-    //HOW TO DO THIS!!
+        gcloud app versions list
+
+16. Stop the App Engine Instance, insert version number
+
+        gcloud app versions stop [insert version number]
 
 16. Confirm App disabled
 
-    - Refresh browser
-      Result: should be a 404 error
+        Refresh browser, the result should be a _404 error_
 
 ## Congratulations!
-You created your first application using App Engine!
+
+        You've created your first application using App Engine!
+        
